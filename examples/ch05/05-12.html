@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+
+  
 <head>
   <meta charset="utf-8">
   <title>05-12</title>
@@ -50,23 +52,30 @@
   </style>
   <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
 </head>
+
+  
 <body>
+//el에서 id 영역지정 ###
 <div id="todolistapp">
+    //엔터,클릭시 addTodo 메소드동작 ###
     <div id="header" class="header">
         <h2>Todo List App</h2>
         <input class="input" type="text" id="task" v-model.trim="todo" 
             placeholder="입력 후 엔터!" v-on:keyup.enter="addTodo">
         <span class="addbutton" v-on:click="addTodo">추 가</span>
     </div>
+  
+    //for문사용 data표시/checked메소드 바인딩/클릭시doneToggle메소드 동작 ###
     <ul id="todolist">
-        <li v-for="a in todolist" v-bind:class="checked(a.done)"
-            v-on:click="doneToggle(a.id)">
+        <li v-for="a in todolist" v-bind:class="checked(a.done)" v-on:click="doneToggle(a.id)">
             <span>{{ a.todo }}</span>
             <span v-if="a.done"> (완료)</span>
             <span class="close" v-on:click.stop="deleteTodo(a.id)">&#x00D7;</span>
         </li>
     </ul>
 </div>
+
+  
 <script type="text/javascript">
 var vm = new Vue({
     el : "#todolistapp",
