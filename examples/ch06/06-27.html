@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,11 +19,7 @@
     <!-- 공용 스타일 끝-->
     <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script> 
 </head>
-<!--이벤트 버스 객체 시작-->
-<script type="text/javascript">
-    var eventBus = new Vue();
-</script>
-<!--이벤트 버스 객체 끝-->
+
 <!-- list-component 시작-->
 <style>
     ul {  margin: 0; padding: 0; }
@@ -49,22 +46,48 @@
     .close:hover {
         background-color: #f44336;  color: white;
     }
-    </style>
-    <template id="list-template">
+</style>
+
+<!-- input-component 시작-->
+<style>
+.input {
+    border: none; width: 75%; height:35px; padding: 10px;
+    float: left; font-size: 16px;
+}
+.addbutton {
+    padding: 10px; width: 25%; height:35px; background: #d9d9d9; 
+    color: #555; float: left; text-align: center;
+    font-size: 13px; cursor: pointer; transition: 0.3s;
+}
+.addbutton:hover { background-color: #bbb; }
+</style>
+
+    
+<!--이벤트 버스 객체 시작-->
+<script type="text/javascript">
+    var eventBus = new Vue();
+</script>
+<!--이벤트 버스 객체 끝-->
+
+
+    //화면표기(data표시) ###
+    <template id="list-template">  //### id
         <ul id="todolist">
-            <li v-for="a in todolist" v-bind:class="checked(a.done)"
-                v-on:click="doneToggle(a.id)">
+            <li v-for="a in todolist" v-bind:class="checked(a.done)" v-on:click="doneToggle(a.id)">
                 <span>{{ a.todo }}</span>
                 <span v-if="a.done"> (완료)</span>
                 <span class="close" v-on:click.stop="deleteTodo(a.id)">&#x00D7;</span>
             </li>
         </ul>
     </template>
+
+    
+    //스크립트(data표시) ###
     <script type="text/javascript">
-    Vue.component('list-component', {
-        template : '#list-template',
+    Vue.component('list-component', {   //### 콤포넌트1 명
+        template : '#list-template',    //### id
         created : function() {
-             eventBus.$on('add-todo', this.addTodo);
+             eventBus.$on('add-todo', this.addTodo);    //### 생성시, 이벤트버스 on을통해 아래의 emit으로 발송된 이벤트('add-todo')를 수신하고, addTodo메소드를 실행함.
         },
         data : function() {
             return {
@@ -101,54 +124,49 @@
         }
     })
     </script>
-<!-- list-component 끝-->
-<!-- input-component 시작-->
-<style>
-.input {
-    border: none; width: 75%; height:35px; padding: 10px;
-    float: left; font-size: 16px;
-}
-.addbutton {
-    padding: 10px; width: 25%; height:35px; background: #d9d9d9; 
-    color: #555; float: left; text-align: center;
-    font-size: 13px; cursor: pointer; transition: 0.3s;
-}
-.addbutton:hover { background-color: #bbb; }
-</style>
-<template id="input-template">
-    <div>
-        <input class="input" type="text" id="task" v-model.trim="todo" 
-            placeholder="입력 후 엔터!" v-on:keyup.enter="addTodo">
-        <span class="addbutton" v-on:click="addTodo">추 가</span>
-    </div>    
-</template>
-<script type="text/javascript">
-Vue.component('input-component', {
-    template : '#input-template',
-    data : function() {
-        return { todo : "" }
-    },
-    methods : {
-        addTodo : function() {
-            eventBus.$emit('add-todo', this.todo);
-            this.todo = "";
+    <!-- list-component 끝-->
+
+    
+    //화면표기(입력칸) ###    
+    <template id="input-template">    //### id
+        <div>
+            <input class="input" type="text" id="task" v-model.trim="todo" 
+                placeholder="입력 후 엔터!" v-on:keyup.enter="addTodo">
+            <span class="addbutton" v-on:click="addTodo">추 가</span>
+        </div>    
+    </template>
+    
+    //스크립트(입력칸) ###   
+    <script type="text/javascript">
+    Vue.component('input-component', {   //### 컴포넌트2 명
+        template : '#input-template',    //### id
+        data : function() {
+            return { todo : "" }
+        },
+        methods : {
+            addTodo : function() {
+                eventBus.$emit('add-todo', this.todo);    //### addTodo메소드 실행시, 이벤트버스 emit을통해 이벤트발신, this.todo는 payload로 포함시켜 컴포넌트1로 값전달함
+                this.todo = "";
+            }
         }
-    }
-})
-</script>
-<!-- input-component 끝-->
-<body>
-    <div id="todolistapp">
-        <div id="header" class="header">
-            <h2>Todo List App</h2>
+    })
+    </script>
+    <!-- input-component 끝-->
 
+
+    
+    <body>
+        <div id="todolistapp">
+            <div id="header" class="header">
+                <h2>Todo List App</h2> 
+            </div> 
         </div>
+    </body>
+        
+    <script type="text/javascript">
+    var vm = new Vue({
+        el : "#todolistapp"
+    })
+    </script>
 
-    </div>
-</body>
-<script type="text/javascript">
-var vm = new Vue({
-    el : "#todolistapp"
-})
-</script>
 </html>
